@@ -11,10 +11,13 @@ chmod 600 $SSH_CONFIG_PATH/key
 echo -e "$SSL_CLIENT_KEY" > $SSH_CONFIG_PATH/ssl.key
 echo -e "$SSL_CLIENT_PEM" > $SSH_CONFIG_PATH/ssl.pem
 
-echo $ARGS
-echo "$SSH_CONFIG_PATH/key"
-echo "$USERNAME"
-echo "$GITHUB_WORKSPACE/$FOLDER" 
-echo $SERVER_IP:$SERVER_DESTINATION
+echo "Host *" > "$SSH_CONFIG_PATH/config"
+echo "  User $USERNAME" >> "$SSH_CONFIG_PATH/config"
+echo "  StrictHostKeyChecking no" >> "$SSH_CONFIG_PATH/config"
+echo "  IdentityFile $SSH_CONFIG_PATH/key" >> "$SSH_CONFIG_PATH/config"
+echo "  ProxyCommand $ARGS" >> "$SSH_CONFIG_PATH/config"
+echo "  ForwardAgent yes" >> "$SSH_CONFIG_PATH/config"
 
-scp $ARGS -i $SSH_CONFIG_PATH/key -o StrictHostKeyChecking=no -o User=$USERNAME -r $GITHUB_WORKSPACE/$FOLDER $SERVER_IP:$SERVER_DESTINATION
+cat "$SSH_CONFIG_PATH/config"
+
+scp -r $GITHUB_WORKSPACE/$FOLDER $SERVER_IP:$SERVER_DESTINATION
