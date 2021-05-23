@@ -20,4 +20,7 @@ echo "  ForwardAgent yes" >> "$SSH_CONFIG_PATH/config"
 
 cat "$SSH_CONFIG_PATH/config"
 
-scp -F $SSH_CONFIG_PATH/config -r $GITHUB_WORKSPACE/$FOLDER $SERVER_IP:$SERVER_DESTINATION
+touch $SSH_CONFIG_PATH/known_hosts
+chmod 644 $SSH_CONFIG_PATH/known_hosts
+
+scp -F $SSH_CONFIG_PATH/config -r $GITHUB_WORKSPACE $SERVER_IP:$SERVER_DESTINATION
