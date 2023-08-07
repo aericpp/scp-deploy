@@ -1,5 +1,6 @@
 #!/bin/bash
 set -eu
+echo "pwd: "
 pwd
 
 SSH_CONFIG_PATH="$HOME/.ssh"
@@ -22,6 +23,8 @@ cat "$SSH_CONFIG_PATH/config"
 
 touch $SSH_CONFIG_PATH/known_hosts
 chmod 644 $SSH_CONFIG_PATH/known_hosts
+
+echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
 
 ssh -F $SSH_CONFIG_PATH/config $SERVER_IP "rm -rf $SERVER_DESTINATION/*"
 scp -O -F $SSH_CONFIG_PATH/config -r $GITHUB_WORKSPACE/* $SERVER_IP:$SERVER_DESTINATION
